@@ -10,7 +10,7 @@ Do not fill in the feedback section. The Founders and Coders team will update th
 
 ## Assessment
 ### 1. Show evidence of some of the learning outcomes you have achieved this week.
-#### 1.1 Develop a server using Express and TypeScript for backend applications (K9, S1, S11, S12)
+#### 1.1 Develop a server using Express and TypeScript for backend applications
  
   I set up the server using Express and TypeScript, including environment variables and route handlers.
  ```tsx
@@ -33,11 +33,11 @@ Do not fill in the feedback section. The Founders and Coders team will update th
  });
  ```
 
-#### 1.2 Identify the server’s role within a full stack application (K1, K2, K3)
+#### 1.2 Identify the server’s role within a full stack application
   
    The server is responsible for handling client requests, processing them, and responding with the appropriate data. It interacts with the database and serves as a bridge between the frontend and the backend.
 
-#### 1.3 Understand the benefits of using TypeScript over JavaScript, such as improved code quality, enhanced developer productivity, and better tooling support (K7, S1)
+#### 1.3 Understand the benefits of using TypeScript over JavaScript, such as improved code quality, enhanced developer productivity, and better tooling support
 
   TypeScript provided type safety and better tooling support, helping catch errors early and improving productivity. Defining the Question type ensured data consistency.
 
@@ -55,10 +55,10 @@ export type Question = {
   timestamp: Date;
 };
 ```
-#### 1.4 Grasp the concept and purpose of RESTful APIs (K11, S12)
+#### 1.4 Grasp the concept and purpose of RESTful APIs
 RESTful APIs allow interaction with the server using standard HTTP methods.
 
-#### 1.5 Construct and implement RESTful APIs effectively (S1, S11, S12, S16)
+#### 1.5 Construct and implement RESTful APIs effectively
 
 Implemented various RESTful API endpoints for creating, retrieving, updating, and deleting quiz questions.
 
@@ -72,10 +72,10 @@ app.post('/questions', (req: Request, res: Response) => {
 });
 ```
 
-#### 1.6 Determine appropriate scenarios for applying RESTful APIs (K7, S9, B2)
+#### 1.6 Determine appropriate scenarios for applying RESTful APIs
 RESTful APIs are used when there is a need to interact with the server to perform operations on resources, such as quiz questions in this application.
 
-#### 1.7 Design endpoint structures for data creation, modification, and deletion (K11, S8, S12)
+#### 1.7 Design endpoint structures for data creation, modification, and deletion
 Designed endpoints to handle various operations on quiz questions.
 ```tsx
 app.put('/questions/:id', (req: Request, res: Response) => {
@@ -91,7 +91,7 @@ app.delete('/questions/:id', (req: Request, res: Response) => {
   res.status(204).send();
 });
 ```
-#### 1.8 Utilize Postman to test RESTful APIs independently of frontend components, ensuring proper functionality, error handling, and adherence to API specifications (S5, S6, S7)
+#### 1.8 Utilize Postman to test RESTful APIs independently of frontend components, ensuring proper functionality, error handling, and adherence to API specifications
 
 Used Postman to test the API endpoints, verifying their functionality and handling of different scenarios.
 ![image](https://github.com/fac29/Alexander--progress-log/assets/94972293/7d4b7dcb-170e-453e-a63a-fab753fc89a1)
@@ -116,7 +116,7 @@ describe('Edit question page', () => {
 ```
 
 
-#### 1.9 Gain experience in documenting the application’s architecture, API endpoints, and user guides for future reference and maintenance (S15, B4, B7, B8)
+#### 1.9 Gain experience in documenting the application’s architecture, API endpoints, and user guides for future reference and maintenance
 
 Documented the API endpoints and their usage in the README.md file for easy reference and maintenance. Additionally, used JSDoc comments to document React components for better clarity.
 
@@ -131,7 +131,7 @@ Documented the API endpoints and their usage in the README.md file for easy refe
 function Button({ name, preIcon, postIcon, handler, color = 'blue', 'data-cy': dataCy }: Props) {
 ```
 
-#### 1.10 Utilize node for filesystem operations (S1, S16)
+#### 1.10 Utilize node for filesystem operations
 
 Used node:fs to perform file operations, such as reading and writing data to a JSON file.
 
