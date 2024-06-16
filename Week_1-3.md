@@ -191,7 +191,41 @@ openssl x509 -req -in keys/selfsigned.csr -signkey keys/selfsigned.key -out keys
 
 ### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
 
+#### 2.1 Set up HTTPS for secure communication
+Setting up HTTPS for secure communication was challenging, especially understanding the self-signed certificates part. We initially struggled with configuring the certificates correctly and making sure the server could run both HTTP and HTTPS. To simplify the solution, we decided to use two separate apps: one for HTTP and another for HTTPS. Additionally, we checked if the SSL key and certificate files exist locally and only then created the HTTPS server to avoid errors when using fs on a possible non-existent file.
 
+```tsx
+import https from 'https';
+import * as fs from 'fs';
+import path from 'path';
+import express, { Express } from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app: Express = express();
+const apphttps: Express = express();
+const port = process.env.PORT || 3000;
+const porthttps = process.env.PORTHTTPS || 8443;
+
+const keyPath = path.resolve(__dirname, '../keys/selfsigned.key');
+const certPath = path.resolve(__dirname, '../keys/certs/selfsigned.crt');
+
+if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+  const options = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+  const serverHTTPS = https.createServer(options, apphttps);
+  serverHTTPS.listen(porthttps, () => {
+    console.log(`[server]: HTTPS Server is running at https://localhost:${porthttps}`);
+  });
+}
+
+app.listen(port, () => {
+  console.log(`[server]: Server is running at ${port}`);
+});
+```
 
 
 
