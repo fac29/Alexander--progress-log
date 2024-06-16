@@ -96,6 +96,25 @@ app.delete('/questions/:id', (req: Request, res: Response) => {
 Used Postman to test the API endpoints, verifying their functionality and handling of different scenarios.
 ![image](https://github.com/fac29/Alexander--progress-log/assets/94972293/7d4b7dcb-170e-453e-a63a-fab753fc89a1)
 
+#### 1.8.2 Using Cypress for End-to-End testing
+I utilized Cypress to perform end-to-end testing on our application. Below is an example of how I tested the edit question functionality.
+```ts
+describe('Edit question page', () => {
+    it('Edit category on question 30', () => {
+        cy.visit('http://localhost:5173/questionbank/editquestion/1');
+
+        cy.get('[data-cy=categoryDropdown]').select('History');
+        cy.get('[data-cy=editButton]').click();
+
+        cy.visit('http://localhost:5173/questionbank/editquestion/1');
+        cy.get('[data-cy=categoryDropdown] option:selected')
+            .invoke('text')
+            .should('eq', 'History');
+    });
+});
+
+```
+
 
 #### 1.9 Gain experience in documenting the application’s architecture, API endpoints, and user guides for future reference and maintenance (S15, B4, B7, B8)
 
@@ -171,24 +190,8 @@ openssl x509 -req -in keys/selfsigned.csr -signkey keys/selfsigned.key -out keys
 
 
 ### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
-#### 2.1 Implement routing in a single-page application using React Router (S1, S11, S16)
-Setting up routing with React Router was challenging, especially with dynamic and nested routes.
-```tsx
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './components/pages/Home';
-import Quiz from './components/pages/Quiz';
-import QuestionBank from './components/pages/QuestionBank';
 
-const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/quiz/:category/:difficulty" element={<Quiz />} />
-    <Route path="/questionbank" element={<QuestionBank />} />
-  </Routes>
-);
 
-export default AppRoutes;
-```
 
 
 
