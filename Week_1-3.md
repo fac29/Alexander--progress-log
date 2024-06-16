@@ -9,8 +9,8 @@ Make sure to record evidence of your processes. You can use code snippets, scree
 Do not fill in the feedback section. The Founders and Coders team will update this with feedback on your progress.
 
 ## Assessment
- ### 1. Show evidence of some of the learning outcomes you have achieved this week.
-#### Develop a server using Express and TypeScript for backend applications (K9, S1, S11, S12)
+### 1. Show evidence of some of the learning outcomes you have achieved this week.
+#### 1.1 Develop a server using Express and TypeScript for backend applications (K9, S1, S11, S12)
  
   I set up the server using Express and TypeScript, including environment variables and route handlers.
  ```tsx
@@ -33,11 +33,11 @@ Do not fill in the feedback section. The Founders and Coders team will update th
  });
  ```
 
-#### Identify the server’s role within a full stack application (K1, K2, K3)
+#### 1.2 Identify the server’s role within a full stack application (K1, K2, K3)
   
    The server is responsible for handling client requests, processing them, and responding with the appropriate data. It interacts with the database and serves as a bridge between the frontend and the backend.
 
-#### Understand the benefits of using TypeScript over JavaScript, such as improved code quality, enhanced developer productivity, and better tooling support (K7, S1)
+#### 1.3 Understand the benefits of using TypeScript over JavaScript, such as improved code quality, enhanced developer productivity, and better tooling support (K7, S1)
 
   TypeScript provided type safety and better tooling support, helping catch errors early and improving productivity. Defining the Question type ensured data consistency.
 
@@ -55,10 +55,10 @@ export type Question = {
   timestamp: Date;
 };
 ```
-#### Grasp the concept and purpose of RESTful APIs (K11, S12)
+#### 1.4 Grasp the concept and purpose of RESTful APIs (K11, S12)
 RESTful APIs allow interaction with the server using standard HTTP methods.
 
-#### Construct and implement RESTful APIs effectively (S1, S11, S12, S16)
+#### 1.5 Construct and implement RESTful APIs effectively (S1, S11, S12, S16)
 
 Implemented various RESTful API endpoints for creating, retrieving, updating, and deleting quiz questions.
 
@@ -72,10 +72,10 @@ app.post('/questions', (req: Request, res: Response) => {
 });
 ```
 
-#### Determine appropriate scenarios for applying RESTful APIs (K7, S9, B2)
+#### 1.6 Determine appropriate scenarios for applying RESTful APIs (K7, S9, B2)
 RESTful APIs are used when there is a need to interact with the server to perform operations on resources, such as quiz questions in this application.
 
-#### Design endpoint structures for data creation, modification, and deletion (K11, S8, S12)
+#### 1.7 Design endpoint structures for data creation, modification, and deletion (K11, S8, S12)
 Designed endpoints to handle various operations on quiz questions.
 ```tsx
 app.put('/questions/:id', (req: Request, res: Response) => {
@@ -91,15 +91,106 @@ app.delete('/questions/:id', (req: Request, res: Response) => {
   res.status(204).send();
 });
 ```
-#### Utilize Postman to test RESTful APIs independently of frontend components, ensuring proper functionality, error handling, and adherence to API specifications (S5, S6, S7)
+#### 1.8 Utilize Postman to test RESTful APIs independently of frontend components, ensuring proper functionality, error handling, and adherence to API specifications (S5, S6, S7)
 
 Used Postman to test the API endpoints, verifying their functionality and handling of different scenarios.
+![image](https://github.com/fac29/Alexander--progress-log/assets/94972293/7d4b7dcb-170e-453e-a63a-fab753fc89a1)
 
 
+#### 1.9 Gain experience in documenting the application’s architecture, API endpoints, and user guides for future reference and maintenance (S15, B4, B7, B8)
 
- ### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
-> [**Learning outcome...**]  
-> [your evidence here]
+Documented the API endpoints and their usage in the README.md file for easy reference and maintenance. Additionally, used JSDoc comments to document React components for better clarity.
+
+```tsx
+/**
+ * Creates a custom button.
+ * @param {string} name - Text on the button. Optional
+ * @param {React.ReactNode} preIcon - Icon on the left. Optional
+ * @param {()=>void} handler - Button handler. Optional
+ * @param {'blue' | 'red' | 'yellow' |'black'|'grey'|'green'|'orange'} color - Button color. Optional
+ */
+function Button({ name, preIcon, postIcon, handler, color = 'blue', 'data-cy': dataCy }: Props) {
+```
+
+#### 1.10 Utilize node for filesystem operations (S1, S16)
+
+Used node:fs to perform file operations, such as reading and writing data to a JSON file.
+
+```tsx
+import * as fs from 'fs/promises';
+
+export async function loadData(): Promise<OuterQuestion> {
+  const fileContent = await fs.readFile('data.json', 'utf8');
+  return JSON.parse(fileContent);
+}
+```
+
+#### 1.11 Set up HTTPS for secure communication
+Configured HTTPS using SSL certificates for secure communication between the client and server.
+
+```tsx
+import https from 'https';
+import * as fs from 'fs';
+import path from 'path';
+
+const keyPath = path.resolve(__dirname, '../keys/selfsigned.key');
+const certPath = path.resolve(__dirname, '../keys/certs/selfsigned.crt');
+
+if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+  const options = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  };
+  const serverHTTPS = https.createServer(options, app);
+  serverHTTPS.listen(porthttps, () => {
+    console.log(`[server]: HTTPS Server is running at https://localhost:${porthttps}`);
+  });
+}
+```
+Below are the instructions for creating the keys and configuring the EC2 instance to make the specific port available:
+
+* Create folders on the root
+```vsh
+mkdir -p keys/certs
+```
+
+* Generate private key
+```vsh
+  openssl genpkey -algorithm RSA -out keys/selfsigned.key
+```
+
+* Create a certificate signing request (CSR)
+```vsh
+openssl req -new -key keys/selfsigned.key -out keys/selfsigned.csr
+```
+
+* Generate the self-signed certificate
+```vsh
+openssl x509 -req -in keys/selfsigned.csr -signkey keys/selfsigned.key -out keys/certs/selfsigned.crt -days 365
+```
+
+
+### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
+#### 2.1 Implement routing in a single-page application using React Router (S1, S11, S16)
+Setting up routing with React Router was challenging, especially with dynamic and nested routes.
+```tsx
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './components/pages/Home';
+import Quiz from './components/pages/Quiz';
+import QuestionBank from './components/pages/QuestionBank';
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/quiz/:category/:difficulty" element={<Quiz />} />
+    <Route path="/questionbank" element={<QuestionBank />} />
+  </Routes>
+);
+
+export default AppRoutes;
+```
+
+
 
 ## Feedback (For CF's)
 > [**Course Facilitator name**]  
