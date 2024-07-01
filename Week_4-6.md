@@ -198,6 +198,8 @@ I encountered problems with CORS due to some computers resolving localhost as lo
 
 
 ## Feedback (For CF's)
-> [**Course Facilitator name**]  
-> [*What went well*]  
+> [**Shaughn**]  
+> [*What went well*]
+> can tell from commit times you did not do this all last minute which I like. Lots of small evidence rather than a few big ones is also very nice.
 > [*Even better if*]
+> Some learner outcomes refferfenced a bit more clearly than other. Also its a bit text relient describing whats going on in the code makes it clearer how it shows the learning outcome
