@@ -223,6 +223,136 @@ public class CookWithWhatDbContext : DbContext
 
 ## Week 9
 
+### 1.1 Setting Up GitHub Actions for Continuous Deployment
+
+We implemented a CI/CD pipeline using GitHub Actions to automate our deployment process to AWS EC2. Here's an overview of our workflow:
+This workflow triggers on pushes and pull requests to the 'AlexTemp' branch, setting up the environment for our .NET application.
+```yaml
+name: .NET
+
+on:
+  push:
+    branches: ['AlexTemp']
+  pull_request:
+    branches: ['AlexTemp']
+
+jobs:
+  deployment:
+    environment: 'Production'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      # ... (build and publish steps)
+```
+
+### 1.2 Configuring AWS Credentials
+
+We securely stored our AWS credentials as GitHub Secrets and used them in our workflow:
+```yaml
+- name: Configure AWS credentials
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    aws-region: eu-west-2
+```
+![image](https://github.com/user-attachments/assets/da0c2e46-6fa3-4ff4-83cf-9978d19371e0)
+
+### 1.3 Managing EC2 Instances
+We implemented logic to check for existing EC2 instances and create new ones if necessary:
+
+```yaml
+- name: Check if EC2 instance exists
+  id: check_ec2
+  run: |
+    INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=CWW" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[?State.Name=='running'].InstanceId" --output text)
+    echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
+
+- name: Create EC2 instance if not exists
+  if: steps.check_ec2.outputs.instance_id == ''
+  id: create_ec2
+  run: |
+    INSTANCE_ID=$(aws ec2 run-instances \
+        --image-id ami-026b2ae0ba2773e0a \
+        --instance-type t2.micro \
+        --key-name CWW \
+        --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=CWW}]' \
+        --query 'Instances[0].InstanceId' \
+        --output text)
+    echo "Created new EC2 instance with ID: $INSTANCE_ID"
+    echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
+```
+This approach ensures we always have a running instance for deployment.
+
+### 1.4 Deploying the Application
+We used SSH to copy our application files to the EC2 instance and configure it:
+```yaml
+- name: Copy files to EC2
+  uses: easingthemes/ssh-deploy@main
+  with:
+    SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+    REMOTE_HOST: ${{ steps.get_ip.outputs.public_ip }}
+    REMOTE_USER: ec2-user
+    SOURCE: "./out/"
+    TARGET: "/home/ec2-user/app"
+
+- name: Configure EC2 instance
+  uses: appleboy/ssh-action@master
+  with:
+    host: ${{ steps.get_ip.outputs.public_ip }}
+    username: ec2-user
+    key: ${{ secrets.SSH_KEY }}
+    script: |
+      # Installation and configuration steps
+      # ...
+      # Start the application
+      nohup ./CookWithWhat.API > /home/ec2-user/app.log 2>&1 &
+```
+This step copies our built application to the EC2 instance and starts it as a background process.
+### 1.5 Setting Up Nginx as a Reverse Proxy
+We configured Nginx on our EC2 instance to act as a reverse proxy for our application:
+```yaml
+server {
+    listen 80;
+    server_name ${{ steps.get_ip.outputs.public_ip }};
+
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+This configuration allows our application to be accessible via HTTP on port 80.
+
+### 1.6 Implementing Security Best Practices
+We used GitHub Secrets to store sensitive information:
+
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* SSH_KEY
+
+These secrets are used securely within our GitHub Actions workflow without exposing them in our code.
+
+### 1.7 Creating a Dedicated AWS IAM User
+We created a dedicated IAM user 'CookWithWhatUser' with specific permissions:
+
+AmazonEC2FullAccess
+AmazonVPCReadOnlyAccess
+
+This follows the principle of least privilege, giving our deployment process only the necessary permissions.
+
+![image](https://github.com/user-attachments/assets/ddf7788a-f1d2-4b77-ae51-5edc531ecf39)
 
 
 
