@@ -261,7 +261,6 @@ We securely stored our AWS credentials as GitHub Secrets and used them in our wo
     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     aws-region: eu-west-2
 ```
-![image](https://github.com/user-attachments/assets/da0c2e46-6fa3-4ff4-83cf-9978d19371e0)
 
 ### 1.3 Managing EC2 Instances
 We implemented logic to check for existing EC2 instances and create new ones if necessary:
@@ -355,32 +354,7 @@ AmazonVPCReadOnlyAccess
 
 This follows the principle of least privilege, giving our deployment process only the necessary permissions.
 
-
-
-
-
-
-
- ### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
-> [**Learning outcome...**]  
-> [your evidence here]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![image](https://github.com/user-attachments/assets/da0c2e46-6fa3-4ff4-83cf-9978d19371e0)
 
 
 ## Feedback (For CF's)
