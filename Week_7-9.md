@@ -270,7 +270,8 @@ We implemented logic to check for existing EC2 instances and create new ones if 
 - name: Check if EC2 instance exists
   id: check_ec2
   run: |
-    INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=CWW" "Name=instance-state-name,Values=running" --query "Reservations[].Instances[?State.Name=='running'].InstanceId" --output text)
+    INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=CWW" "Name=instance-state-name,Values=running"
+         --query "Reservations[].Instances[?State.Name=='running'].InstanceId" --output text)
     echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
 
 - name: Create EC2 instance if not exists
@@ -344,6 +345,8 @@ We used GitHub Secrets to store sensitive information:
 
 These secrets are used securely within our GitHub Actions workflow without exposing them in our code.
 
+![image](https://github.com/user-attachments/assets/ddf7788a-f1d2-4b77-ae51-5edc531ecf39)
+
 ### 1.7 Creating a Dedicated AWS IAM User
 We created a dedicated IAM user 'CookWithWhatUser' with specific permissions:
 
@@ -351,8 +354,6 @@ AmazonEC2FullAccess
 AmazonVPCReadOnlyAccess
 
 This follows the principle of least privilege, giving our deployment process only the necessary permissions.
-
-![image](https://github.com/user-attachments/assets/ddf7788a-f1d2-4b77-ae51-5edc531ecf39)
 
 
 
