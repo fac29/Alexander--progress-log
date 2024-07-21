@@ -122,9 +122,135 @@ public class RecipeContext : DbContext
 }
 ```
 
+## Week 8
+
+### 1.1 Implementing Dependency Injection
+
+We implemented dependency injection to improve the flexibility and testability of our code. Here's an example from our `Program.cs`:
+
+```csharp
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddDbContext<CookWithWhatDbContext>(options => 
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+```
+This setup allows us to inject the database context and other services into our controllers and classes.
+
+### 1.2 Creating and Using Interfaces
+We created interfaces to define contracts for our classes, promoting loose coupling. Here's an example of our IRecipe interface:
+```csharp
+public interface IRecipe 
+{
+    int Id { get; }
+    string Title { get; set; }
+    string Description { get; set; }
+    string Image { get; set; }
+    string Instructions { get; set; }
+}
+```
+### 1.3 Implementing Repository Pattern
+We started implementing the repository pattern to abstract data access. Here's a snippet from our RecipeRepository:
+```csharp
+public class RecipeRepository : IRecipe
+{
+    private readonly CookWithWhatDbContext _context = default!;
+
+    public async Task<IEnumerable<IRecipe>> GetAllRecipes()
+    {
+        return await _context.Recipes.ToListAsync();
+    }
+}
+```
+### 1.4 Using Extension Methods for Service Configuration
+We utilized extension methods to organize our service configurations, improving the readability of our Program.cs:
+```csharp
+public static class ServiceCollectionExtensions
+{
+    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
+    { 
+        var connectionString = configuration.GetConnectionString("CookWithWhatDb");
+        services.AddDbContext<CookWithWhatDbContext>(options => options.UseSqlite(connectionString));
+
+        services.AddScoped<IRecipeSeeder, RecipeSeeder>();
+    }
+}
+```
+### 1.5 Implementing Data Seeding
+We implemented a seeding mechanism to populate our database with initial data:
+```csharp
+public class RecipeSeeder : IRecipeSeeder
+{
+    private readonly CookWithWhatDbContext _context;
+
+    public RecipeSeeder(CookWithWhatDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task Seed()
+    {
+        if (await _context.Database.CanConnectAsync())
+        {
+            if (!_context.Recipes.Any())
+            {
+                var recipes = GetRecipes();
+                _context.Recipes.AddRange(recipes);
+                await _context.SaveChangesAsync();
+            }
+        }
+    }
+
+    // GetRecipes method implementation...
+}
+```
+### 1.6 Configuring Entity Framework Core
+We set up our DbContext to work with SQLite and configured our entity relationships:
+```csharp
+public class CookWithWhatDbContext : DbContext
+{
+    public CookWithWhatDbContext(DbContextOptions<CookWithWhatDbContext> options) : base(options) { }
+
+    public DbSet<Users> Users { get; set; }
+    public DbSet<Recipes> Recipes { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlite("Data Source=../CookWithWhat.Infrastructure/Persistence/cookwithwhat.db");
+    }
+
+    // Additional configurations...
+}
+```
+
+## Week 9
+
+
+
+
+
+
+
+
  ### 2. Show an example of some of the learning outcomes you have struggled with and/or would like to re-visit.
 > [**Learning outcome...**]  
 > [your evidence here]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Feedback (For CF's)
 > [**Course Facilitator name**]  
