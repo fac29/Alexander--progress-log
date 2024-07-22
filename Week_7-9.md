@@ -358,6 +358,8 @@ This follows the principle of least privilege, giving our deployment process onl
 
 
 ## Feedback (For CF's)
-> [**Course Facilitator name**]  
-> [*What went well*]  
+> [**Shaughn**]  
+> [*What went well*]
+> I like the organized single topic walking us through a specific learning good portfolio practice.
 > [*Even better if*]
+> Although you portfolio audience is technical its possible they dont have deve ops experience you could pad out your word count by explaining a few terms.
