@@ -43,9 +43,11 @@ We employed design thinking techniques and user-centered design principles:
 
 
 Initial Figma:
+
 ![image](https://github.com/user-attachments/assets/1d4ad0f5-ad95-4bc4-937b-4ced3b62387a)
 
-Second iteration
+Second iteration:
+
 ![image](https://github.com/user-attachments/assets/b2f21ee6-2585-4c1e-bca9-86800cf4368d)
 
 
